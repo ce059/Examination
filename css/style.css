@@ -1,0 +1,257 @@
+/* ============================================================
+   style.css — Dream Villa VR Experience
+   Loading screen, UI overlay, HUD labels
+   ============================================================ */
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── CSS Variables ── */
+:root {
+  --gold:      #e8d5a3;
+  --gold-dim:  #c9a96e;
+  --navy:      #0a0a20;
+  --blue-mid:  #1a1a3e;
+  --blue-mist: #7a9bb5;
+  --glass-bg:  rgba(10, 10, 26, 0.72);
+  --border:    rgba(232, 213, 163, 0.28);
+  --radius:    3px;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans:  'Segoe UI', system-ui, sans-serif;
+  --transition: 0.3s ease;
+}
+
+/* ── Loading Screen ── */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background:
+    radial-gradient(ellipse at 30% 60%, rgba(0,120,200,0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 30%, rgba(200,160,60,0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #050510 0%, #0d1428 40%, #0a1e38 70%, #050510 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+  overflow: hidden;
+}
+
+#loading-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(232,213,163,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+#loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Stars */
+#loading-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+  animation: twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* Loading title */
+.villa-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: normal;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow:
+    0 0 30px rgba(232, 213, 163, 0.35),
+    0 0 80px rgba(232, 213, 163, 0.12);
+  margin-bottom: 0.25em;
+  animation: fadeInDown 1s ease both;
+}
+
+.villa-subtitle {
+  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+  letter-spacing: 0.7em;
+  text-transform: uppercase;
+  color: var(--blue-mist);
+  margin-bottom: 3.5em;
+  animation: fadeInDown 1s 0.2s ease both;
+}
+
+/* Decorative line */
+.villa-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  margin: 0 auto 3em;
+  animation: fadeIn 1s 0.3s ease both;
+}
+
+/* Progress bar */
+.progress-container {
+  width: min(380px, 78vw);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+  margin-bottom: 1.6em;
+  animation: fadeIn 1s 0.4s ease both;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+  background-size: 200% 100%;
+  width: 0%;
+  transition: width 0.35s ease;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.loading-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(122, 155, 181, 0.7);
+  animation: fadeIn 1s 0.5s ease both;
+  min-height: 1.2em;
+  transition: opacity 0.3s ease;
+}
+
+/* Keyframes */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── UI Overlay (top navigation) ── */
+#ui-overlay {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 12px;
+  font-family: var(--font-serif);
+}
+
+.ui-btn {
+  padding: 7px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), transform var(--transition);
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  user-select: none;
+}
+
+.ui-btn:hover {
+  background: rgba(232, 213, 163, 0.14);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.ui-btn:active {
+  transform: translateY(0);
+  background: rgba(232, 213, 163, 0.22);
+}
+
+/* ── Night mode toggle hint ── */
+#night-hint {
+  position: fixed;
+  top: 58px;
+  right: 20px;
+  z-index: 200;
+  font-family: var(--font-serif);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(122, 155, 181, 0.55);
+  pointer-events: none;
+}
+
+/* ── Room label (bottom-centre HUD) ── */
+#room-label {
+  position: fixed;
+  bottom: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: rgba(232, 213, 163, 0.85);
+  background: var(--glass-bg);
+  padding: 7px 22px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  white-space: nowrap;
+}
+
+/* ── Crosshair cursor (A-Frame injects <a-cursor>) ── */
+a-scene canvas { cursor: none; }
+
+/* ── Mobile adjustments ── */
+@media (max-width: 600px) {
+  .ui-btn {
+    font-size: 0.58rem;
+    padding: 6px 10px;
+    letter-spacing: 0.18em;
+  }
+  #room-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    padding: 6px 14px;
+    bottom: 40px;
+  }
+  .villa-title {
+    letter-spacing: 0.2em;
+  }
+}
